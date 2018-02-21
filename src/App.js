@@ -10,10 +10,20 @@ class App extends Component {
     super(props);
     this.state = {
       weatherObservations: [
-        { id: 1, temperature: 0 },
-        { id: 2, temperature: 30 }
+        { id: 1, temperature: 13 },
+        { id: 2, temperature: 15 },
+        { id: 3, temperature: 7 },
+        { id: 4, temperature: 8 }
       ]
     };
+    // This binding is necessary to make `this` work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(
+
+    );
   }
 
   componentWillMount() {
@@ -36,22 +46,24 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Simple Weather</h1>
         </header>
         <h1>Tokio (35.6584421,139.7328635)</h1>
+        <h2>Temperatures (°C)</h2>
         {this.state.weatherObservations.length === 0 && <p>Ei havaintoja</p>}
         {
           this.state.weatherObservations.map(
             obs =>
             <WeatherNote
-              id={obs.id}
-              temperature={obs.temperature}
-              handleChange={this.handleChange}
+            id={obs.id}
+            temperature={obs.temperature}
+            handleChange={this.handleChange}
             />
-        )}
-      </div>
-    );
+          )}
+          <button onClick={this.handleClick}>New obs</button>
+        </div>
+      );
+    }
   }
-}
 
-export default App;
+  export default App;
