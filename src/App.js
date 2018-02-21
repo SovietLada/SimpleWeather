@@ -17,8 +17,6 @@ class App extends Component {
       ],
       value: 0
     };
-    // This binding is necessary to make `this` work in the callback
-    // this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -29,7 +27,6 @@ class App extends Component {
     );
   }
 
-  // TODO: check uid generation for this
   handleSubmit(event) {
     const modified = this.state.weatherObservations;
     modified.push(
@@ -38,41 +35,13 @@ class App extends Component {
     this.setState(
       {weatherObservations: modified}
     );
-    alert('A observation was submitted: ' + this.state.value);
+    alert('An observation was submitted: ' + this.state.value);
     event.preventDefault();
   }
-
-  // TODO: check uid generation for this
-  /*
-  handleClick() {
-    const modified = this.state.weatherObservations;
-    modified.push(
-      { id: this.state.weatherObservations.length + 1, temperature: -1 }
-    );
-    this.setState(
-      {weatherObservations: modified}
-    );
-  }
-  */
 
   componentWillMount() {
     // ...
   }
-
-  /*
-  handleChange = (event, id) => {
-    const modified = this.state.weatherObservations;
-    modified.map(obs => {
-      if (obs.id === id) {
-        obs.temperature = parseInt(event.target.value, 10) || "";
-      }
-      return obs;
-    });
-    this.setState(
-      {weatherObservations: modified}
-    );
-  }
-  */
 
   render() {
     return (
@@ -82,7 +51,10 @@ class App extends Component {
           <h1 className="App-title">Simple Weather</h1>
         </header>
         <h1>Tokio (35.6584421,139.7328635)</h1>
-        <h2>Temperatures (°C)</h2>
+        <h2>
+          Highest temperature for the last 24 hours: {Math.max(...this.state.weatherObservations.map(o => o.temperature))} — Lowest temperature for the last 24 hours: {Math.min(...this.state.weatherObservations.map(o => o.temperature))}
+        </h2>
+        <h3>Temperatures (°C)</h3>
         {this.state.weatherObservations.length === 0 && <p>No observations</p>}
         {
           this.state.weatherObservations.map(
@@ -95,7 +67,7 @@ class App extends Component {
           )}
           <form onSubmit={this.handleSubmit}>
             <label>
-            Observation:
+            Observation (°C):
             <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
           </label>
           <input type="submit" value="Submit" />
