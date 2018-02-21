@@ -14,22 +14,52 @@ class App extends Component {
         { id: 2, temperature: 15 },
         { id: 3, temperature: 7 },
         { id: 4, temperature: 8 }
-      ]
+      ],
+      value: 0
     };
     // This binding is necessary to make `this` work in the callback
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleClick() {
+  handleChange(event) {
     this.setState(
-
+      {value: parseInt(event.target.value, 10)}
     );
   }
+
+  // TODO: check uid generation for this
+  handleSubmit(event) {
+    const modified = this.state.weatherObservations;
+    modified.push(
+      { id: this.state.weatherObservations.length + 1, temperature: this.state.value }
+    );
+    this.setState(
+      {weatherObservations: modified}
+    );
+    alert('A observation was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  // TODO: check uid generation for this
+  /*
+  handleClick() {
+    const modified = this.state.weatherObservations;
+    modified.push(
+      { id: this.state.weatherObservations.length + 1, temperature: -1 }
+    );
+    this.setState(
+      {weatherObservations: modified}
+    );
+  }
+  */
 
   componentWillMount() {
     // ...
   }
 
+  /*
   handleChange = (event, id) => {
     const modified = this.state.weatherObservations;
     modified.map(obs => {
@@ -38,8 +68,11 @@ class App extends Component {
       }
       return obs;
     });
-    this.setState({weatherObservations: modified});
+    this.setState(
+      {weatherObservations: modified}
+    );
   }
+  */
 
   render() {
     return (
@@ -50,7 +83,7 @@ class App extends Component {
         </header>
         <h1>Tokio (35.6584421,139.7328635)</h1>
         <h2>Temperatures (°C)</h2>
-        {this.state.weatherObservations.length === 0 && <p>Ei havaintoja</p>}
+        {this.state.weatherObservations.length === 0 && <p>No observations</p>}
         {
           this.state.weatherObservations.map(
             obs =>
@@ -60,7 +93,13 @@ class App extends Component {
             handleChange={this.handleChange}
             />
           )}
-          <button onClick={this.handleClick}>New obs</button>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+            Observation:
+            <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
         </div>
       );
     }
