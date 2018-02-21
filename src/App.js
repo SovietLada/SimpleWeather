@@ -3,16 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 import WeatherNote from './WeatherNote';
 // TODO: lisää express.js
+
 class App extends Component {
+
   constructor(props) {
     super(props);
-
     this.state = {
       weatherObservations: [{ id: 1, temperature: 0 }, { id: 2, temperature: 30 }]
     };
   }
 
   componentWillMount() {
+    // ...
   }
 
   handleChange = (event, id) => {
@@ -43,9 +45,6 @@ class App extends Component {
               handleChange={this.handleChange}
             />
         )}
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
       </div>
     );
   }
