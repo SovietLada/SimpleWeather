@@ -17,17 +17,16 @@ class App extends Component {
       ],
       value: 0
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
+    let val = event.target.value || 0;
     this.setState(
-      {value: parseInt(event.target.value, 10)}
+      {value: parseInt(val, 10)}
     );
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     const modified = this.state.weatherObservations;
     modified.push(
       { id: this.state.weatherObservations.length + 1, temperature: this.state.value }
@@ -52,7 +51,7 @@ class App extends Component {
         </header>
         <h1>Tokio (35.6584421,139.7328635)</h1>
         <h2>
-          Highest temperature for the last 24 hours: {Math.max(...this.state.weatherObservations.map(o => o.temperature))} — Lowest temperature for the last 24 hours: {Math.min(...this.state.weatherObservations.map(o => o.temperature))}
+          Highest temperature for the last 24 hours: {Math.max(...this.state.weatherObservations.map(o => o.temperature))} °C, lowest: {Math.min(...this.state.weatherObservations.map(o => o.temperature))} °C
         </h2>
         <h3>Temperatures (°C)</h3>
         {this.state.weatherObservations.length === 0 && <p>No observations</p>}
