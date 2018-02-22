@@ -14,6 +14,8 @@ class WeatherStation extends Component {
 
   handleChange = (event) => {
     let val = event.target.value || 0;
+    val = val >= 100 ? 99 : val;
+    val = val <= -100 ? -99 : val;
     this.setState(
       {value: parseInt(val, 10)}
     );
