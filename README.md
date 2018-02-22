@@ -6,7 +6,6 @@
 
 ### TODOs
 
-* Fix the bug where NaN submission are accepted via input form
 * Add time stamps to observations 
 * Make min/max observations to match latest submissions within 24 hours
 * Add field for location that displays most recent temperature submission
