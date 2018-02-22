@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class WeatherNote extends Component {
 
   handleChange = (event) => {
-    this.props.handleChange(event, this.props.id)
+    // ...
   }
 
   render() {
