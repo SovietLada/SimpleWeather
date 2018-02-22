@@ -41,7 +41,7 @@ class WeatherStation extends Component {
       <h2>
         Highest temperature for the last 24 hours: {this.state.weatherObservations.length !== 0 && Math.max(...this.state.weatherObservations.map(o => o.temperature))} °C, lowest: {this.state.weatherObservations.length !== 0 && Math.min(...this.state.weatherObservations.map(o => o.temperature))} °C
       </h2>
-      <h3>Temperatures (°C)</h3>
+      <h3>Temperatures (°C) | Most recent submission: {this.state.weatherObservations.length === 0 ? '-' : this.state.value + ' °C'}</h3>
       {this.state.weatherObservations.length === 0 && <p>No observations</p>}
       {this.state.weatherObservations.map(
           obs =>
@@ -58,6 +58,7 @@ class WeatherStation extends Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
+        ------------------------------------------------------------------------
       </div>
     );
   }
