@@ -20,18 +20,6 @@ class App extends Component {
     };
   }
 
-  handleChange = (event) => {
-    // ...
-  }
-
-  handleSubmit = (event) => {
-    // ...
-  }
-
-  componentWillMount() {
-    // ...
-  }
-
   render() {
     return (
       <div className="App">

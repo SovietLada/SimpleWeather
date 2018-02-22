@@ -59,7 +59,6 @@ class WeatherStation extends Component {
       </div>
     );
   }
-
 }
 
 export default WeatherStation;
