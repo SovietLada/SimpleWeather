@@ -7,7 +7,6 @@
 ### TODOs
 
 * Refactor long lines
-* Add time stamps to observations 
 * Make min/max observations to match latest submissions within 24 hours
 * Add field for location that displays most recent temperature submission
 * Implement DB & persistent storage
