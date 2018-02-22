@@ -43,23 +43,21 @@ class WeatherStation extends Component {
       </h2>
       <h3>Temperatures (°C)</h3>
       {this.state.weatherObservations.length === 0 && <p>No observations</p>}
-      {
-        this.state.weatherObservations.map(
+      {this.state.weatherObservations.map(
           obs =>
           <WeatherNote
           id={obs.id}
           temperature={obs.temperature}
           submissionTime={obs.submissionTime}
           handleChange={this.handleChange}
-          />
-        )}
+          />)}
         <form onSubmit={this.handleSubmit}>
           <label>
-          Observation (°C):
-          <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+            Observation (°C):
+            <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
       </div>
     );
   }
