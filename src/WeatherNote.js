@@ -9,7 +9,9 @@ class WeatherNote extends Component {
   render() {
     return (
       <div className="weather-note">
-        <input type="text" value={this.props.temperature} onChange={this.handleChange} />
+        <input type="text"
+          value={this.props.temperature + ' (' + this.props.submissionTime + ')'} 
+          onChange={this.handleChange} />
       </div>
     );
   }

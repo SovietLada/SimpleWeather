@@ -20,9 +20,12 @@ class WeatherStation extends Component {
   }
 
   handleSubmit = (event) => {
+    var timestamp = require('time-stamp');
     const modified = this.state.weatherObservations;
     modified.push(
-      { id: this.state.weatherObservations.length + 1, temperature: this.state.value }
+      { id: this.state.weatherObservations.length + 1,
+        temperature: this.state.value,
+        submissionTime: timestamp('DD/MM/YYYY HH:mm:ss') }
     );
     this.setState(
       {weatherObservations: modified}
@@ -46,6 +49,7 @@ class WeatherStation extends Component {
           <WeatherNote
           id={obs.id}
           temperature={obs.temperature}
+          submissionTime={obs.submissionTime}
           handleChange={this.handleChange}
           />
         )}
