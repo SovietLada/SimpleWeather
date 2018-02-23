@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import WeatherNote from './WeatherNote';
 
+const DEGREE_CAP = 100;
+
 class WeatherStation extends Component {
 
   constructor(props) {
@@ -21,8 +23,8 @@ class WeatherStation extends Component {
 
   handleChange = (event) => {
     let val = event.target.value || 0;
-    val = val >= 100 ? 99 : val;
-    val = val <= -100 ? -99 : val;
+    val = val >= DEGREE_CAP ? DEGREE_CAP - 1 : val;
+    val = val <= -DEGREE_CAP ? -DEGREE_CAP + 1 : val;
     this.setState(
       {value: parseInt(val, 10)}
     );
