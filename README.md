@@ -6,5 +6,4 @@
 
 ### TODOs
 
-* Fix most recent submission field: it should mutate only when value is submitted
 * Implement DB & persistent storage
