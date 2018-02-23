@@ -17,7 +17,8 @@ class WeatherStation extends Component {
         { temperature: -20, submissionTime: new Date('2018-02-22T07:00:00') },
         { temperature: -24, submissionTime: new Date('2018-02-22T09:27:00') }
       ],
-      value: 0
+      value: 0,
+      recent: 0
     };
   }
 
@@ -39,7 +40,8 @@ class WeatherStation extends Component {
       submissionTime: new Date(timestamp('YYYY-MM-DDTHH:mm:ss'))
     });
     this.setState(
-      {weatherObservations: modified}
+      {weatherObservations: modified,
+      recent: this.state.value}
     );
     alert('An observation was submitted: ' + this.state.value + ' °C on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
     event.preventDefault();
@@ -68,7 +70,7 @@ class WeatherStation extends Component {
 
   getRecentSub() {
     return (
-      this.state.weatherObservations.length !== 0 ? this.state.value + ' °C' : '-'
+      this.state.weatherObservations.length !== 0 ? this.state.recent + ' °C' : '-'
     );
   }
 
