@@ -6,8 +6,7 @@ class WeatherStation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      weatherObservations: [
-      ],
+      weatherObservations: [],
       value: 0
     };
   }
@@ -59,14 +58,9 @@ class WeatherStation extends Component {
       );
     }
 
-    render() {
+    getNotes() {
       return (
-        <div className="weather-station">
-        <h1>{this.props.name}</h1>
-        <h2>
-        Highest temperature for the last 24 hours: {this.getMaxVal()} °C, lowest: {this.getMinVal()} °C
-        </h2>
-        <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
+        <div>
         {this.state.weatherObservations.length === 0 && <p>No observations</p>}
         {this.state.weatherObservations.map(
           obs =>
@@ -75,13 +69,33 @@ class WeatherStation extends Component {
           temperature={obs.temperature}
           submissionTime={obs.submissionTime}
           handleChange={this.handleChange} />)}
+          </div>
+        );
+      }
+
+      getForm() {
+        return (
+          <div>
           <form onSubmit={this.handleSubmit}>
-          <label>
-          Observation (°C):
-          <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
+          <label>Observation (°C):
+          <input type="number"
+          value={parseInt(this.state.value, 10)}
+          onChange={this.handleChange} />
           </label>
           <input type="submit" value="Submit" />
           </form>
+          </div>
+        );
+      }
+
+      render() {
+        return (
+          <div className="weather-station">
+          <h1>{this.props.name}</h1>
+          <h2>Highest temperature for the last 24 hours: {this.getMaxVal()} °C, lowest: {this.getMinVal()} °C</h2>
+          <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
+          {this.getNotes()}
+          {this.getForm()}
           ------------------------------------------------------------------------
           </div>
         );

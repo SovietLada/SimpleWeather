@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import WeatherNote from './WeatherNote';
 import WeatherStation from './WeatherStation';
 // TODO: lisää express.js
 
