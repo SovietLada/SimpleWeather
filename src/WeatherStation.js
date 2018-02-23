@@ -9,12 +9,6 @@ class WeatherStation extends Component {
     super(props);
     this.state = {
       weatherObservations: [
-        { temperature: 10, submissionTime: new Date('2018-02-20T00:00:00') },
-        { temperature: -10, submissionTime: new Date('2018-02-22T23:59:59') },
-        { temperature: 5, submissionTime: new Date('2018-02-23T00:00:00') },
-        { temperature: 2, submissionTime: new Date('2018-02-22T00:00:00') },
-        { temperature: -1, submissionTime: new Date('2018-02-23T08:00:00') },
-        { temperature: -20, submissionTime: new Date('2018-02-22T07:00:00') }
       ],
       value: 0,
       recent: 0
@@ -42,7 +36,7 @@ class WeatherStation extends Component {
       {weatherObservations: modified,
       recent: this.state.value}
     );
-    alert('An observation was submitted: ' + this.state.value + ' on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
+    alert('An observation was submitted: ' + this.state.value + ' °C on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
     event.preventDefault();
   }
 
@@ -53,14 +47,14 @@ class WeatherStation extends Component {
     return yesterday.setDate(now.getDate() - 1);
   }
 
-  getMaxVal() {
+  get24hMaxVal() {
     const result = this.state.weatherObservations.filter(obs => obs.submissionTime >= this.getYesterday());
     return (
       result.length !== 0 ? Math.max(...result.map(obs => obs.temperature)) : '-'
     );
   }
 
-  getMinVal() {
+  get24hMinVal() {
     const result = this.state.weatherObservations.filter(obs => obs.submissionTime >= this.getYesterday());
     return (
       result.length !== 0 ? Math.min(...result.map(obs => obs.temperature)) : '-'
@@ -107,7 +101,7 @@ class WeatherStation extends Component {
       return (
         <div className="weather-station">
         <h1>{this.props.name}</h1>
-        <h2>Highest temperature for the last 24 hours: {this.getMaxVal()} °C, lowest: {this.getMinVal()} °C</h2>
+        <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
         <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
         {this.getNotes()}
         {this.getForm()}
