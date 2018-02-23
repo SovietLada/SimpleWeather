@@ -8,8 +8,7 @@ class WeatherStation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      weatherObservations: [
-      ],
+      weatherObservations: [],
       value: 0,
       recent: 0
     };
