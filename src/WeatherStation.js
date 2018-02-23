@@ -28,42 +28,64 @@ class WeatherStation extends Component {
       { id: this.state.weatherObservations.length + 1,
         temperature: this.state.value,
         submissionTime: timestamp('DD/MM/YYYY HH:mm:ss') }
-    );
-    this.setState(
-      {weatherObservations: modified}
-    );
-    alert('An observation was submitted: ' + this.state.value);
-    event.preventDefault();
-  }
+      );
+      this.setState(
+        {weatherObservations: modified}
+      );
+      alert('An observation was submitted: ' + this.state.value);
+      event.preventDefault();
+    }
 
-  render() {
-    return(
-      <div className="weather-station">
-      <h1>{this.props.name}</h1>
-      <h2>
-        Highest temperature for the last 24 hours: {this.state.weatherObservations.length !== 0 && Math.max(...this.state.weatherObservations.map(o => o.temperature))} °C, lowest: {this.state.weatherObservations.length !== 0 && Math.min(...this.state.weatherObservations.map(o => o.temperature))} °C
-      </h2>
-      <h3>Temperatures (°C) | Most recent submission: {this.state.weatherObservations.length === 0 ? '-' : this.state.value + ' °C'}</h3>
-      {this.state.weatherObservations.length === 0 && <p>No observations</p>}
-      {this.state.weatherObservations.map(
+    getMaxVal() {
+      return (
+        this.state.weatherObservations.length !== 0 ?
+        Math.max(...this.state.weatherObservations.map(o => o.temperature)) :
+        '-'
+      );
+    }
+
+    getMinVal() {
+      return (
+        this.state.weatherObservations.length !== 0 ?
+        Math.min(...this.state.weatherObservations.map(o => o.temperature)) :
+        '-'
+      );
+    }
+
+    getRecentSub() {
+      return (
+        this.state.weatherObservations.length !== 0 ? this.state.value + ' °C' :
+        '-'
+      );
+    }
+
+    render() {
+      return (
+        <div className="weather-station">
+        <h1>{this.props.name}</h1>
+        <h2>
+        Highest temperature for the last 24 hours: {this.getMaxVal()} °C, lowest: {this.getMinVal()} °C
+        </h2>
+        <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
+        {this.state.weatherObservations.length === 0 && <p>No observations</p>}
+        {this.state.weatherObservations.map(
           obs =>
           <WeatherNote
           id={obs.id}
           temperature={obs.temperature}
           submissionTime={obs.submissionTime}
-          handleChange={this.handleChange}
-          />)}
-        <form onSubmit={this.handleSubmit}>
+          handleChange={this.handleChange} />)}
+          <form onSubmit={this.handleSubmit}>
           <label>
-            Observation (°C):
-            <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
+          Observation (°C):
+          <input type="number" value={parseInt(this.state.value, 10)} onChange={this.handleChange} />
           </label>
           <input type="submit" value="Submit" />
-        </form>
-        ------------------------------------------------------------------------
-      </div>
-    );
-  }
-}
+          </form>
+          ------------------------------------------------------------------------
+          </div>
+        );
+      }
+    }
 
-export default WeatherStation;
+    export default WeatherStation;
