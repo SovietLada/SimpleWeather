@@ -7,5 +7,4 @@
 ### TODOs
 
 * Fix most recent submission field: it should mutate only when value is submitted
-* Make min/max observations to match latest submissions within 24 hours
 * Implement DB & persistent storage
