@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import WeatherStation from './WeatherStation';
-// TODO: lisää express.js
 
 class App extends Component {
 
