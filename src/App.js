@@ -9,11 +9,11 @@ class App extends Component {
     super(props);
     this.state = {
       weatherStations: [
-        { id: 1, name: 'Tokio (35.6584421, 139.7328635)' },
-        { id: 2, name: 'Helsinki (60.1697530, 24.9490830)' },
-        { id: 3, name: 'New York (40.7406905, -73.9938438)'},
-        { id: 4, name: 'Amsterdam (52.3650691, 4.9040238)'},
-        { id: 5, name: 'Dubai (25.092535, 55.1562243)'}
+        { id: 1, name: 'Tokio' },
+        { id: 2, name: 'Helsinki' },
+        { id: 3, name: 'New York'},
+        { id: 4, name: 'Amsterdam'},
+        { id: 5, name: 'Dubai'}
       ]
     };
   }
@@ -29,9 +29,9 @@ class App extends Component {
           this.state.weatherStations.map(
             station =>
             <WeatherStation
-            id={station.id}
-            name={station.name}
-            />
+              id={station.id}
+              name={station.name}
+              />
           )}
         </div>
       );
