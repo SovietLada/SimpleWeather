@@ -3,10 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import WeatherStation from './WeatherStation';
 
+var firebase = require("firebase/app");
+require("firebase/database");
+
 class App extends Component {
 
   constructor(props) {
     super(props);
+    this.config();
     this.state = {
       weatherStations: [
         { id: 1, name: 'Tokio' },
@@ -16,6 +20,20 @@ class App extends Component {
         { id: 5, name: 'Dubai'}
       ]
     };
+  }
+
+  config() {
+    if (!firebase.apps.length) {
+      var config = {
+        apiKey: "AIzaSyDXNe3noqv1orXteel9edHo6YV_tKWvDNw",
+        authDomain: "simpleweather-d73a2.firebaseapp.com",
+        databaseURL: "https://simpleweather-d73a2.firebaseio.com",
+        projectId: "simpleweather-d73a2",
+        storageBucket: "simpleweather-d73a2.appspot.com",
+        messagingSenderId: "124534684590"
+      };
+      firebase.initializeApp(config);
+    }
   }
 
   render() {
