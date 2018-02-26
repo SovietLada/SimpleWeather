@@ -109,8 +109,18 @@ class WeatherStation extends Component {
   }
 
   getRecentSub() {
+    let date = undefined;
+    let temp = undefined;
+    var l = this.state.weatherObservations.length;
+    for (var i = 0; i < l; i++) {
+      let comp = new Date(this.state.weatherObservations[i].submissionTime);
+      if (date < comp || date === undefined) {
+        date = comp;
+        temp = this.state.weatherObservations[i].temperature;
+      }
+    }
     return (
-      this.state.weatherObservations.length !== 0 ? this.state.recent + ' °C' : '-'
+      this.state.weatherObservations.length !== 0 ? temp + ' °C' : '-'
     );
   }
 
