@@ -8,13 +8,21 @@ const DEGREE_CAP = 100;
 
 class WeatherStation extends Component {
 
+  componentDidMount() {
+    if (this.state.weatherObservations.length === 0) {
+      const newData = this.returnWeatherData(this, this.props.name);
+      this.setState(
+        {weatherObservations: newData}
+      );
+    }
+  }
+
   constructor(props) {
     super(props);
-    const modified = this.returnWeatherData(this, this.props.name);
     this.state = {
-      weatherObservations: modified,
+      weatherObservations: [],
       value: 0,
-      recent: 0
+      recent: undefined
     };
   }
 
@@ -64,13 +72,14 @@ class WeatherStation extends Component {
     this.writeWeatherData(
       this.props.name,
       this.state.value,
-      timestamp('YYYY-MM-DDTHH:mm:ss')
+      new Date(timestamp('YYYY-MM-DDTHH:mm:ss')).toUTCString()
     );
     const modified = this.returnWeatherData(this, this.props.name);
     this.setState(
       {weatherObservations: modified, recent: this.state.value}
     );
-    alert('An observation was submitted from ' + this.props.name + ': ' + this.state.value + ' °C on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
+    alert('An observation was submitted from ' + this.props.name + ': '
+    + this.state.value + ' °C on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
     event.preventDefault();
   }
 
@@ -82,14 +91,18 @@ class WeatherStation extends Component {
   }
 
   get24hMaxVal() {
-    const result = this.state.weatherObservations.filter(obs => obs.submissionTime >= this.getYesterday());
+    const result = this.state.weatherObservations.filter(
+      obs => new Date(obs.submissionTime) >= this.getYesterday()
+    );
     return (
       result.length !== 0 ? Math.max(...result.map(obs => obs.temperature)) : '-'
     );
   }
 
   get24hMinVal() {
-    const result = this.state.weatherObservations.filter(obs => obs.submissionTime >= this.getYesterday());
+    const result = this.state.weatherObservations.filter(
+      obs => new Date(obs.submissionTime) >= this.getYesterday()
+    );
     return (
       result.length !== 0 ? Math.min(...result.map(obs => obs.temperature)) : '-'
     );
@@ -111,38 +124,39 @@ class WeatherStation extends Component {
             id={obs.id}
             temperature={obs.temperature}
             submissionTime={obs.submissionTime}
-            handleChange={this.handleChange} />)}
-          </div>
-        );
-      }
-
-      getForm() {
-        return (
-          <div>
-            <form onSubmit={this.handleSubmit}>
-              <label>Observation (°C):
-                <input type="number"
-                  value={parseInt(this.state.value, 10)}
-                  onChange={this.handleChange} />
-              </label>
-              <input type="submit" value="Submit" />
-            </form>
-          </div>
-        );
-      }
-
-      render() {
-        return (
-          <div className="weather-station">
-            <h1>{this.props.name}</h1>
-            <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
-            <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
-            {this.getNotes()}
-            {this.getForm()}
-            ------------------------------------------------------------------------
-          </div>
-        );
-      }
+            handleChange={this.handleChange} />)
+          }
+        </div>
+      );
     }
 
-    export default WeatherStation;
+    getForm() {
+      return (
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>Observation (°C):
+              <input type="number"
+                value={parseInt(this.state.value, 10)}
+                onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
+      );
+    }
+
+    render() {
+      return (
+        <div className="weather-station">
+          <h1>{this.props.name}</h1>
+          <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
+          <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
+          {this.getNotes()}
+          {this.getForm()}
+          ------------------------------------------------------------------------
+        </div>
+      );
+    }
+  }
+
+  export default WeatherStation;
