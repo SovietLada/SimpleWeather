@@ -9,12 +9,7 @@ const DEGREE_CAP = 100;
 class WeatherStation extends Component {
 
   componentDidMount() {
-    if (this.state.weatherObservations.length === 0) {
-      const newData = this.returnWeatherData(this, this.props.name);
-      this.setState(
-        {weatherObservations: newData}
-      );
-    }
+    this.readWeatherData(this, this.props.name);
   }
 
   constructor(props) {
@@ -33,20 +28,22 @@ class WeatherStation extends Component {
     });
   }
 
-  returnWeatherData = (context, station) => {
-    var ret = [];
+  readWeatherData = (context, station) => {
     var tempsRef = firebase.database().ref('temperatures/' + station + '/');
     tempsRef.on('value', function(snapshot) {
+      let added = [];
       snapshot.forEach(function(childSnapshot) {
         var childData = childSnapshot.val();
-        ret.push({
-          id: ret.length + 1,
+        added.push({
+          id: added.length + 1,
           temperature: childData.temperature,
           submissionTime: childData.submissionTime
         });
       });
+      context.setState((prevState, props) => ({
+        weatherObservations: added
+      }));
     });
-    return ret;
   }
 
   guid() {
@@ -69,17 +66,14 @@ class WeatherStation extends Component {
 
   handleSubmit = (event) => {
     var timestamp = require('time-stamp');
+    let dateForSub = new Date(timestamp('YYYY-MM-DDTHH:mm:ss'));
     this.writeWeatherData(
       this.props.name,
       this.state.value,
-      new Date(timestamp('YYYY-MM-DDTHH:mm:ss')).toUTCString()
-    );
-    const modified = this.returnWeatherData(this, this.props.name);
-    this.setState(
-      {weatherObservations: modified, recent: this.state.value}
+      dateForSub.toUTCString()
     );
     alert('An observation was submitted from ' + this.props.name + ': '
-    + this.state.value + ' °C on ' + new Date(timestamp('YYYY-MM-DDTHH:mm:ss')));
+    + this.state.value + ' °C on ' + dateForSub);
     event.preventDefault();
   }
 
@@ -133,8 +127,7 @@ class WeatherStation extends Component {
           <WeatherNote
             id={obs.id}
             temperature={obs.temperature}
-            submissionTime={obs.submissionTime}
-            handleChange={this.handleChange} />)
+            submissionTime={obs.submissionTime} />)
           }
         </div>
       );
