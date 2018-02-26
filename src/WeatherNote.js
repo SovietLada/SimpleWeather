@@ -6,8 +6,7 @@ class WeatherNote extends Component {
     return (
       <div className="weather-note">
         <input type="text"
-          value={this.props.temperature + ' (' + this.props.submissionTime + ')'}
-          onChange={this.handleChange} />
+          value={this.props.temperature + ' (' + this.props.submissionTime + ')'} />
       </div>
     );
   }

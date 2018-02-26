@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import WeatherNote from './WeatherNote';
-
 var firebase = require("firebase/app");
 require("firebase/database");
-
 const DEGREE_CAP = 100;
 
 class WeatherStation extends Component {
@@ -17,12 +15,13 @@ class WeatherStation extends Component {
     this.state = {
       weatherObservations: [],
       value: 0,
-      recent: undefined
+      recent: null
     };
   }
 
   writeWeatherData(station, temp, date) {
-    firebase.database().ref('temperatures/' + station + '/' + this.guid()).set({
+    const newKey = firebase.database().ref().child('temperatures').push().key;
+    firebase.database().ref('temperatures/' + station + '/' + newKey).set({
       temperature: temp,
       submissionTime : date
     });
@@ -46,19 +45,13 @@ class WeatherStation extends Component {
     });
   }
 
-  guid() {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-  }
-
   handleChange = (event) => {
     let val = event.target.value || 0;
-    val = val >= DEGREE_CAP ? DEGREE_CAP - 1 : val;
-    val = val <= -DEGREE_CAP ? -DEGREE_CAP + 1 : val;
+    if (val >= DEGREE_CAP) {
+      val = DEGREE_CAP - 1;
+    } else if (val <= -DEGREE_CAP) {
+      val = -DEGREE_CAP + 1;
+    }
     this.setState(
       {value: parseInt(val, 10)}
     );
@@ -102,13 +95,12 @@ class WeatherStation extends Component {
     );
   }
 
-  getRecentSub() {
-    let date = undefined;
-    let temp = undefined;
-    var l = this.state.weatherObservations.length;
-    for (var i = 0; i < l; i++) {
+  getRecentSubmission() {
+    let date = null;
+    let temp = null;
+    for (var i = 0; i < this.state.weatherObservations.length; i++) {
       let comp = new Date(this.state.weatherObservations[i].submissionTime);
-      if (date < comp || date === undefined) {
+      if (date < comp || date === null) {
         date = comp;
         temp = this.state.weatherObservations[i].temperature;
       }
@@ -118,9 +110,12 @@ class WeatherStation extends Component {
     );
   }
 
-  getNotes() {
+  render() {
     return (
-      <div>
+      <div className="weather-station">
+        <h1>{this.props.name}</h1>
+        <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
+        <h3>Temperatures (°C), most recent submission: {this.getRecentSubmission()}</h3>
         {this.state.weatherObservations.length === 0 && <p>No observations</p>}
         {this.state.weatherObservations.map(
           obs =>
@@ -129,13 +124,6 @@ class WeatherStation extends Component {
             temperature={obs.temperature}
             submissionTime={obs.submissionTime} />)
           }
-        </div>
-      );
-    }
-
-    getForm() {
-      return (
-        <div>
           <form onSubmit={this.handleSubmit}>
             <label>Observation (°C):
               <input type="number"
@@ -144,18 +132,6 @@ class WeatherStation extends Component {
             </label>
             <input type="submit" value="Submit" />
           </form>
-        </div>
-      );
-    }
-
-    render() {
-      return (
-        <div className="weather-station">
-          <h1>{this.props.name}</h1>
-          <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
-          <h3>Temperatures (°C), most recent submission: {this.getRecentSub()}</h3>
-          {this.getNotes()}
-          {this.getForm()}
           ------------------------------------------------------------------------
         </div>
       );

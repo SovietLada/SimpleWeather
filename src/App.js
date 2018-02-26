@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import WeatherStation from './WeatherStation';
-
 var firebase = require("firebase/app");
 require("firebase/database");
 
@@ -41,7 +40,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Simple Weather</h1>
+          <h1 className="App-title">Simple Weather 0.1</h1>
         </header>
         {
           this.state.weatherStations.map(
