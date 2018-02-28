@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import WeatherNote from './WeatherNote';
 var firebase = require("firebase/app");
 require("firebase/database");
+var timestamp = require('time-stamp');
 const DEGREE_CAP = 100;
 
 class WeatherStation extends Component {
@@ -58,7 +59,6 @@ class WeatherStation extends Component {
   }
 
   handleSubmit = (event) => {
-    var timestamp = require('time-stamp');
     let dateForSub = new Date(timestamp('YYYY-MM-DDTHH:mm:ss'));
     this.writeWeatherData(
       this.props.name,
@@ -71,7 +71,6 @@ class WeatherStation extends Component {
   }
 
   getYesterday() {
-    var timestamp = require('time-stamp');
     let now = new Date(timestamp('YYYY-MM-DDTHH:mm:ss'));
     let yesterday = new Date(now);
     return yesterday.setDate(now.getDate() - 1);
@@ -96,9 +95,8 @@ class WeatherStation extends Component {
   }
 
   getRecentSubmission() {
-    let date = null;
-    let temp = null;
-    for (var i = 0; i < this.state.weatherObservations.length; i++) {
+    let date = null, temp = null;
+    for (var i = 0, l = this.state.weatherObservations.length; i < l; i++) {
       let comp = new Date(this.state.weatherObservations[i].submissionTime);
       if (date < comp || date === null) {
         date = comp;
@@ -113,9 +111,16 @@ class WeatherStation extends Component {
   render() {
     return (
       <div className="weather-station">
-        <h1>{this.props.name}</h1>
-        <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C, lowest: {this.get24hMinVal()} °C</h2>
-        <h3>Temperatures (°C), most recent submission: {this.getRecentSubmission()}</h3>
+        <h1>{this.props.name}: {this.getRecentSubmission()}</h1>
+        <h2>Highest temperature for the last 24 hours: {this.get24hMaxVal()} °C; lowest: {this.get24hMinVal()} °C</h2>
+          <form onSubmit={this.handleSubmit}>
+            <label>New observation (°C):
+              <input type="number"
+                value={parseInt(this.state.value, 10)}
+                onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
         {this.state.weatherObservations.length === 0 && <p>No observations</p>}
         {this.state.weatherObservations.map(
           obs =>
@@ -124,14 +129,6 @@ class WeatherStation extends Component {
             temperature={obs.temperature}
             submissionTime={obs.submissionTime} />)
           }
-          <form onSubmit={this.handleSubmit}>
-            <label>Observation (°C):
-              <input type="number"
-                value={parseInt(this.state.value, 10)}
-                onChange={this.handleChange} />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
           ------------------------------------------------------------------------
         </div>
       );
